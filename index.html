@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hw-16</title>
+</head>
+
+<body>
+    <script>
+        class Student {
+            #attendance = Array(30);
+            #progress = Array(30);
+
+            get attendance() {
+                this.#attendance.splice(30);
+                return this.#attendance;
+            }
+            get progress() {
+                this.#progress.splice(30);
+                return this.#progress;
+            }
+            constructor(name, surname, birthdayYear) {
+                this.name = name;
+                this.surname = surname;
+                this.birthdayYear = birthdayYear;
+            }
+            #carrentLesson() {
+                let lastFalse = this.attendance.lastIndexOf(false);
+                let lastTrue = this.attendance.lastIndexOf(true);
+                let last = lastFalse > lastTrue ? lastFalse : lastTrue;
+                return ++last;
+            }
+            #carrentMark() {
+                return this.progress.filter(mark => mark).length;
+            }
+            present () {
+                if (this.#carrentLesson() < this.attendance.length) {
+                    return this.attendance[this.#carrentLesson()] = true;
+                }
+            }
+            absent () {
+                if (this.#carrentLesson() < this.attendance.length) {
+                    return this.attendance[this.#carrentLesson()] = false;
+                }
+            }
+            mark (value) {
+                if (0 <= value && 10 >= value) {
+                    let nextMark = this.#carrentMark();
+                    if (nextMark < this.progress.length) {
+                        return this.progress[nextMark] = value;
+                    }
+                }
+            }
+            summary () {
+                const averageAttendance = this.attendance.reduce((acc, value) => {
+                    return acc += value ? 1 : 0;
+                }, 0) / this.#carrentLesson();
+                const averageMark = this.progress.reduce((acc, value) => acc += value) / this.#carrentMark();
+
+                if (averageAttendance > 0.9 && averageMark > 9) {
+                    return 'Ути какой молодчинка!';
+                } else if (averageAttendance < 0.9 && averageMark < 9) {
+                    return 'Редиска!';
+                } else {
+                    return 'Норм, но можно лучше';
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
